@@ -63,7 +63,15 @@ header {
     padding: 20px;
 
     box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+}
 
+.escudo {
+    position: absolute;
+    width: 75px;
+    left: 160px;
+    top: 48%;
+    transform: translateY(-45%);
+    margin-right: 20px;
 }
 
 /*Nav*/
@@ -94,7 +102,7 @@ nav a:hover {
 
 #hero {
 
-    min-height: 100vh;
+    min-height: 50vh;
 
     display: flex;
     flex-direction: column;
@@ -108,14 +116,6 @@ nav a:hover {
     color: white;
 
     padding: 40px;
-
-}
-
-#hero img {
-
-    width: 280px;
-
-    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, .45));
 
 }
 
@@ -176,6 +176,7 @@ nav a:hover {
 section:not(#hero) {
 
     padding: 80px 60px;
+    text-align: center;
 
 }
 
@@ -344,5 +345,99 @@ footer h3 {
 footer p {
 
     margin: 8px 0;
+
+}
+
+/*Menu Hamburguesa*/
+
+#menu-btn {
+
+    display: none;
+
+    background: none;
+
+    border: none;
+
+    color: white;
+
+    font-size: 2rem;
+
+    cursor: pointer;
+
+}
+
+/*Diseño Responsive*/
+
+@media screen and (max-width:768px) {
+
+    header {
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        padding: 15px 20px;
+
+    }
+
+    .escudo {
+
+        position: static;
+
+        transform: none;
+
+        width: 50px;
+
+        margin: 0;
+
+    }
+
+    #menu-btn {
+
+        display: block;
+
+    }
+
+    nav {
+
+        display: none;
+
+        position: absolute;
+
+        top: 100%;
+
+        left: 0;
+
+        width: 100%;
+
+        background: var(--color-secundario);
+
+        flex-direction: column;
+
+        gap: 20px;
+
+        padding: 20px;
+
+    }
+
+    nav.active {
+
+        display: flex;
+
+    }
+
+}
+
+form {
+
+    width: 100%;
+
+    max-width: 500px;
+
+    margin: 40px auto;
+
+    padding: 0 15px;
 
 }
