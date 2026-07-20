@@ -420,6 +420,7 @@ footer p {
 
         padding: 20px;
 
+        animation:deslizar .3s ease;
     }
 
     nav.active {
