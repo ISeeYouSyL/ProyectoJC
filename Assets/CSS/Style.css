@@ -1,3 +1,5 @@
+/*Variables de color*/
+
 :root {
     --color-primario: #C62828;
     --color-secundario: #0B1F3A;
@@ -8,7 +10,10 @@
     --fuente-principal: Arial, Helvetica, sans-serif;
 }
 
-*, *::before, *::after {
+/*Variables Generales*/
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -134,17 +139,42 @@ nav a:hover::after {
     transform: scale(1.05);
 }
 
+.boton-interes {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: 2px solid var(--color-primario);
+    border-radius: 25px;
+    background-color: transparent;
+    color: var(--color-primario);
+    font-family: inherit;
+    font-size: .95rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .3s ease;
+}
+
+.boton-interes:hover {
+    background-color: var(--color-primario);
+    color: white;
+    transform: translateY(-3px);
+}
+
+/* Main */
+
 /* Secciones */
 section:not(#hero) {
     padding: 80px 60px;
     text-align: center;
 }
 
-#nosotros, #vision, #contacto {
+#nosotros,
+#vision,
+#contacto {
     background-color: var(--color-blanco);
 }
 
-#mision, #programas {
+#mision,
+#programas {
     background-color: var(--color-fondo);
 }
 
@@ -202,7 +232,7 @@ section p {
 article {
     width: 320px;
     padding: 30px;
-    border-top: 5px solid var(--color-primario);
+    border-top: 5px solid var(--color-secundario);
     border-radius: 15px;
     background: var(--color-blanco);
     box-shadow: 0 5px 15px rgba(0, 0, 0, .15);
@@ -246,6 +276,7 @@ form h3 {
 label {
     margin-top: 15px;
     font-weight: bold;
+    text-align: center;
 }
 
 input,
@@ -261,7 +292,8 @@ textarea {
     resize: none;
 }
 
-input:focus, textarea:focus {
+input:focus,
+textarea:focus {
     outline: none;
     border-color: var(--color-primario);
     box-shadow: 0 0 0 3px rgba(198, 40, 40, .15);
@@ -296,7 +328,70 @@ footer p {
     margin: 8px 0;
 }
 
-/* Menú para celular */
+/* Modo oscuro */
+#tema-btn {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    z-index: 1100;
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 50%;
+    background-color: var(--color-secundario);
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+    transition: .3s ease;
+}
+
+#tema-btn:hover {
+    background-color: var(--color-primario);
+    transform: scale(1.1);
+}
+
+/* Colores del modo oscuro */
+body.modo-oscuro {
+    background-color: #121826;
+    color: #E5E7EB;
+}
+
+body.modo-oscuro #nosotros,
+body.modo-oscuro #vision,
+body.modo-oscuro #contacto,
+body.modo-oscuro .info-club,
+body.modo-oscuro #mision,
+body.modo-oscuro #programas {
+    background-color: #121826;
+}
+
+body.modo-oscuro .info-club section,
+body.modo-oscuro article,
+body.modo-oscuro form {
+    background-color: #1F2937;
+}
+
+body.modo-oscuro section h2,
+body.modo-oscuro .info-club h2,
+body.modo-oscuro article h3,
+body.modo-oscuro form h3 {
+    color: #FFFFFF;
+}
+
+body.modo-oscuro p,
+body.modo-oscuro label {
+    color: #E5E7EB;
+}
+
+body.modo-oscuro input,
+body.modo-oscuro textarea {
+    border-color: #64748B;
+    background-color: #111827;
+    color: white;
+}
+
+/* Menú Responsive */
 #menu-btn {
     display: none;
     border: none;
@@ -304,6 +399,36 @@ footer p {
     color: white;
     font-size: 2rem;
     cursor: pointer;
+}
+
+.controles-texto {
+    position: fixed;
+    right: 25px;
+    bottom: 88px;
+    z-index: 1100;
+    display: flex;
+    overflow: hidden;
+    border-radius: 25px;
+    background-color: var(--color-secundario);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+}
+
+.controles-texto button {
+    width: 44px;
+    height: 44px;
+    margin: 0;
+    border: none;
+    background: transparent;
+    color: white;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .3s ease;
+}
+
+.controles-texto button:hover {
+    background-color: var(--color-primario);
 }
 
 @keyframes deslizar {

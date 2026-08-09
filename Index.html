@@ -14,12 +14,20 @@
 
 </head>
 
+<!-- Botones Tamaño de Texto-->
+
+<div class="controles-texto" aria-label="Controles de tamaño de texto">
+    <button id="disminuir-texto" type="button" aria-label="Disminuir tamaño de texto">A-</button>
+    <button id="aumentar-texto" type="button" aria-label="Aumentar tamaño de texto">A+</button>
+</div>
+
 <body>
 
     <!-- Inicio de la pagina-->
 
     <header>
-        <button id="menu-btn">☰</button>
+
+        <button id="menu-btn">☰</button> <!-- Menu Hamburguesa para Celular -->
         <img src="./Assets/God.png" alt="Escudo del Club Deportivo GoD" class="escudo">
         <nav>
 
@@ -30,13 +38,14 @@
 
         </nav>
 
+        <button id="tema-btn" type="button" aria-label="Activar modo oscuro">🌙</button> <!-- Boton Modo Oscuro -->
     </header>
 
     <!-- Contenido principal de la pagina -->
 
     <main>
 
-        <!--Hero-->
+        <!-- Hero -->
 
         <section id="hero">
 
@@ -44,9 +53,10 @@
 
             <h1>Club Deportivo GoD</h1>
 
+
             <h3>Jugamos • Incluimos • Transformamos</h3>
 
-            <p>
+            <p id="frase-motivadora">
 
                 No se trata de las limitaciones, sino de la determinación.
 
@@ -60,7 +70,7 @@
 
         </section>
         <div class="info-club">
-            <!--Quienes somos -->
+            <!-- Quienes somos -->
 
             <section id="nosotros">
 
@@ -69,14 +79,13 @@
                 <p>
 
                     Somos un club de deporte adaptado comprometido con la inclusión, ofreciendo oportunidades deportivas
-                    a
-                    personas con discapacidad física, sensorial e intelectual.
+                    a personas con discapacidad física, sensorial e intelectual.
 
                 </p>
 
             </section>
 
-            <!--Mision-->
+            <!-- Mision -->
 
             <section id="mision">
 
@@ -91,7 +100,7 @@
 
             </section>
 
-            <!--Vision-->
+            <!-- Visión -->
 
             <section id="vision">
 
@@ -107,7 +116,7 @@
 
         </section>
 
-        <!--Programas-->
+        <!-- Programas Deportivos -->
 
         <section id="programas">
 
@@ -126,6 +135,10 @@
 
                     </p>
 
+                    <button type="button" class="boton boton-interes" data-programa="futbol">
+                        Me interesa
+                    </button>
+
                 </article>
 
                 <article>
@@ -139,6 +152,10 @@
 
                     </p>
 
+                    <button type="button" class="boton boton-interes" data-programa="baloncesto">
+                        Me interesa
+                    </button>
+
                 </article>
 
                 <article>
@@ -150,6 +167,10 @@
                         Entrenamientos en pruebas de pista y campo adaptadas para diferentes tipos de discapacidad.
 
                     </p>
+
+                    <button type="button" class="boton boton-interes" data-programa="paraatletismo">
+                        Me interesa
+                    </button>
 
                 </article>
 
@@ -164,6 +185,10 @@
 
                     </p>
 
+                    <button type="button" class="boton boton-interes" data-programa="paranatacion">
+                        Me interesa
+                    </button>
+
                 </article>
 
                 <article>
@@ -172,10 +197,15 @@
 
                     <p>
 
+
                         Deporte de precision y estrategia, diseñado para personas con discapacidad física severa, que
                         desarrolla estrategia y concentracion.
 
                     </p>
+
+                    <button type="button" class="boton boton-interes" data-programa="boccia">
+                        Me interesa
+                    </button>
 
                 </article>
 
@@ -183,7 +213,7 @@
 
         </section>
 
-        <!--Contacto-->
+        <!-- Contacto -->
 
         <section id="contacto">
 
@@ -195,7 +225,7 @@
 
             <p><strong>Correo:</strong> clubgodgiron@gmail.com</p>
 
-
+            <!-- Formulario -->
 
             <form>
                 <h3>Envíanos un mensaje</h3>
@@ -234,7 +264,7 @@
 
     </footer>
 
-    <script src="./Assets/JS/Proyecto.js"></script>
+    <script src="./Assets/JS/js.js"></script>
 </body>
 
 </html>
