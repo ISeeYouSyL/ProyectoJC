@@ -1,4 +1,4 @@
-/*Variables de color*/
+/* Variables de color */
 
 :root {
     --color-primario: #C62828;
@@ -9,6 +9,7 @@
     --color-blanco: #FFFFFF;
     --fuente-principal: Arial, Helvetica, sans-serif;
 }
+
 
 /*Variables Generales*/
 *,
@@ -40,7 +41,9 @@ a {
     color: inherit;
 }
 
-/*Encabezado*/
+
+/* Header */
+
 header {
     background-color: var(--color-secundario);
     position: sticky;
@@ -96,7 +99,9 @@ nav a:hover::after {
     width: 100%;
 }
 
-/*Hero*/
+
+/* Hero */
+
 #hero {
     min-height: 50vh;
     display: flex;
@@ -159,22 +164,21 @@ nav a:hover::after {
     transform: translateY(-3px);
 }
 
+
 /* Main */
 
 /* Secciones */
+
 section:not(#hero) {
     padding: 80px 60px;
     text-align: center;
 }
 
-#nosotros,
-#vision,
-#contacto {
+#nosotros, #vision, #contacto {
     background-color: var(--color-blanco);
 }
 
-#mision,
-#programas {
+#mision, #programas {
     background-color: var(--color-fondo);
 }
 
@@ -220,7 +224,9 @@ section p {
     box-shadow: 0 12px 25px rgba(0, 0, 0, .20);
 }
 
+
 /* Programas */
+
 .contenedor-programas {
     display: flex;
     flex-wrap: wrap;
@@ -253,7 +259,9 @@ article p {
     width: 100%;
 }
 
+
 /* Formulario */
+
 form {
     width: 100%;
     max-width: 500px;
@@ -312,7 +320,9 @@ input[type="submit"]:hover {
     background-color: var(--color-acento);
 }
 
+
 /* Pie de página */
+
 footer {
     padding: 40px 20px;
     background-color: var(--color-secundario);
@@ -328,7 +338,9 @@ footer p {
     margin: 8px 0;
 }
 
+
 /* Modo oscuro */
+
 #tema-btn {
     position: fixed;
     right: 25px;
@@ -351,7 +363,9 @@ footer p {
     transform: scale(1.1);
 }
 
+
 /* Colores del modo oscuro */
+
 body.modo-oscuro {
     background-color: #121826;
     color: #E5E7EB;
@@ -391,7 +405,9 @@ body.modo-oscuro textarea {
     color: white;
 }
 
+
 /* Menú Responsive */
+
 #menu-btn {
     display: none;
     border: none;

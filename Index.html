@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="es">
 
 <head>
@@ -7,38 +8,42 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Club Deportivo GoD</title>
+    <title> Club Deportivo GoD </title>
 
-    <link rel="stylesheet" href="./Assets/CSS/style.css">
-
+    <link rel="stylesheet" href="./CSS/Proyecto.css">
 
 </head>
 
-<!-- Botones Tamaño de Texto-->
+<div class="controles-texto" aria-label="Controles de tamaño de texto"> <!-- Botones Tamaño de Texto-->
 
-<div class="controles-texto" aria-label="Controles de tamaño de texto">
-    <button id="disminuir-texto" type="button" aria-label="Disminuir tamaño de texto">A-</button>
-    <button id="aumentar-texto" type="button" aria-label="Aumentar tamaño de texto">A+</button>
+    <button id="disminuir-texto" type="button" aria-label="Disminuir tamaño de texto"> A- </button>
+    <button id="aumentar-texto" type="button" aria-label="Aumentar tamaño de texto"> A+ </button>
+
 </div>
 
 <body>
 
-    <!-- Inicio de la pagina-->
+    <!-- Inicio de la pagina -->
 
     <header>
 
-        <button id="menu-btn">☰</button> <!-- Menu Hamburguesa para Celular -->
+        <button id="menu-btn"> <!-- Menu Hamburguesa para Celular -->
+            
+            ☰ 
+
+        </button> 
+
         <img src="./Assets/God.png" alt="Escudo del Club Deportivo GoD" class="escudo">
+
         <nav>
-
-            <a href="#hero">Inicio</a>
-            <a href="#nosotros">Nosotros</a>
-            <a href="#programas">Programas</a>
-            <a href="#contacto">Contacto</a>
-
+            <a href="#hero"> Inicio </a>
+            <a href="#nosotros"> Nosotros </a>
+            <a href="#programas"> Programas </a>
+            <a href="#contacto"> Contacto </a>
         </nav>
 
         <button id="tema-btn" type="button" aria-label="Activar modo oscuro">🌙</button> <!-- Boton Modo Oscuro -->
+
     </header>
 
     <!-- Contenido principal de la pagina -->
@@ -49,12 +54,9 @@
 
         <section id="hero">
 
+            <h1> Club Deportivo GoD </h1>
 
-
-            <h1>Club Deportivo GoD</h1>
-
-
-            <h3>Jugamos • Incluimos • Transformamos</h3>
+            <h3> Jugamos • Incluimos • Transformamos </h3>
 
             <p id="frase-motivadora">
 
@@ -69,12 +71,15 @@
             </a>
 
         </section>
+
         <div class="info-club">
+
+
             <!-- Quienes somos -->
 
             <section id="nosotros">
 
-                <h2>¿Quiénes Somos?</h2>
+                <h2> ¿Quiénes Somos? </h2>
 
                 <p>
 
@@ -89,7 +94,7 @@
 
             <section id="mision">
 
-                <h2>Misión</h2>
+                <h2> Misión </h2>
 
                 <p>
 
@@ -104,7 +109,7 @@
 
             <section id="vision">
 
-                <h2>Visión</h2>
+                <h2> Visión </h2>
 
                 <p>
 
@@ -116,17 +121,18 @@
 
         </section>
 
+
         <!-- Programas Deportivos -->
 
         <section id="programas">
 
-            <h2>Nuestros Programas Deportivos</h2>
+            <h2> Nuestros Programas Deportivos </h2>
 
             <div class="contenedor-programas">
 
                 <article>
 
-                    <h3>Fútbol 5 Visual</h3>
+                    <h3> Fútbol 5 Visual </h3>
 
                     <p>
 
@@ -136,14 +142,18 @@
                     </p>
 
                     <button type="button" class="boton boton-interes" data-programa="futbol">
+
                         Me interesa
+                        
                     </button>
+                    
 
                 </article>
 
+
                 <article>
 
-                    <h3>Baloncesto en Silla de Ruedas</h3>
+                    <h3> Baloncesto en Silla de Ruedas </h3>
 
                     <p>
 
@@ -153,14 +163,17 @@
                     </p>
 
                     <button type="button" class="boton boton-interes" data-programa="baloncesto">
+
                         Me interesa
+
                     </button>
 
                 </article>
 
+
                 <article>
 
-                    <h3>Paraatletismo</h3>
+                    <h3> Paraatletismo </h3>
 
                     <p>
 
@@ -169,14 +182,18 @@
                     </p>
 
                     <button type="button" class="boton boton-interes" data-programa="paraatletismo">
+
                         Me interesa
+
                     </button>
+
 
                 </article>
 
+
                 <article>
 
-                    <h3>Paranatación</h3>
+                    <h3> Paranatación </h3>
 
                     <p>
 
@@ -185,18 +202,20 @@
 
                     </p>
 
-                    <button type="button" class="boton boton-interes" data-programa="paranatacion">
+                    <button type="button" class="boton boton-interes" data-programa="paranatacion"> 
+
                         Me interesa
+
                     </button>
 
                 </article>
 
+
                 <article>
 
-                    <h3>Boccia</h3>
+                    <h3> Boccia </h3>
 
                     <p>
-
 
                         Deporte de precision y estrategia, diseñado para personas con discapacidad física severa, que
                         desarrolla estrategia y concentracion.
@@ -204,7 +223,9 @@
                     </p>
 
                     <button type="button" class="boton boton-interes" data-programa="boccia">
+
                         Me interesa
+
                     </button>
 
                 </article>
@@ -213,32 +234,34 @@
 
         </section>
 
+
         <!-- Contacto -->
 
         <section id="contacto">
 
-            <h2>Contáctanos</h2>
+            <h2> Contáctanos </h2>
 
-            <p><strong>Dirección:</strong> Cl. 9 #34-01, Cali, Valle del Cauca.</p>
+            <p> <strong> Dirección: </strong> Cl. 9 #34-01, Cali, Valle del Cauca. </p>
 
-            <p><strong>Teléfono:</strong> +57 311 795 5573</p>
+            <p> <strong> Teléfono: </strong> +57 311 795 5573 </p>
 
-            <p><strong>Correo:</strong> clubgodgiron@gmail.com</p>
+            <p> <strong> Correo: </strong> clubgodgiron@gmail.com </p>
+
 
             <!-- Formulario -->
 
             <form>
-                <h3>Envíanos un mensaje</h3>
+                <h3> Envíanos un mensaje </h3>
 
-                <label for="nombre">Nombre</label>
+                <label for="nombre"> Nombre </label>
 
                 <input type="text" id="nombre" name="nombre" required>
 
-                <label for="correo">Correo electrónico</label>
+                <label for="correo"> Correo electrónico </label>
 
                 <input type="email" id="correo" name="correo" required>
 
-                <label for="mensaje">Mensaje</label>
+                <label for="mensaje"> Mensaje </label>
 
                 <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
 
@@ -250,21 +273,23 @@
 
     </main>
 
+
     <!--Pie de pagina-->
 
     <footer>
 
-        <h3>Club Deportivo GoD</h3>
+        <h3> Club Deportivo GoD </h3>
 
-        <p>Jugamos • Incluimos • Transformamos</p>
+        <p> Jugamos • Incluimos • Transformamos </p>
 
-        <p>No se trata de las limitaciones, sino de la determinación.</p>
+        <p> No se trata de las limitaciones, sino de la determinación. </p>
 
-        <p>&copy; 2026 Club Deportivo GoD. Todos los derechos reservados.</p>
+        <p> &copy; 2026 Club Deportivo GoD. Todos los derechos reservados. </p>
 
     </footer>
 
-    <script src="./Assets/JS/js.js"></script>
+    <script src="JS/Proyecto.js"> </script>
+
 </body>
 
 </html>
