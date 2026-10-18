@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title> Club Deportivo GoD </title>
+
+    <link rel="stylesheet" href="./style.css">
+
+</head>
+
+<div class="controles-texto" aria-label="Controles botones de ayuda"> <!-- Botones de ayuda-->
+
+    <button id="disminuir-texto" type="button" aria-label="Disminuir tamaño de texto"> A- </button>
+
+    <button id="aumentar-texto" type="button" aria-label="Aumentar tamaño de texto"> A+ </button>
+
+    <button id="fuente-dislexia" type="button" aria-pressed="false" aria-label="Activar fuente de dislexia">Aa</button>
+
+    <button id="alto-contraste" type="button" aria-pressed="false" aria-label="Activar alto contraste">◐</button>
+
+    <button id="modo-escuchar" type="button" aria-pressed="false"
+        aria-label="Escuchar el contenido de la página">🔊</button>
+
+</div>
+
+<body>
+
+    <div id="notificacion-global" class="notificacion-global"></div> <!-- Contenedor de notificaciones globales -->
+
+    <!-- Inicio de la pagina -->
+
+    <header>
+
+        <button id="menu-btn"> <!-- Menu Hamburguesa para Celular -->
+
+            ☰
+
+        </button>
+
+        <img src="./Assets/God.png" alt="Escudo del Club Deportivo GoD" class="escudo"> <!-- Escudo del Club -->
+
+        <!-- Barra de Navegacion -->
+
+        <nav>
+
+            <a href="#hero"> Inicio </a>
+            <a href="#nosotros"> Nosotros </a>
+            <a href="#programas"> Programas </a>
+            <a href="#contacto"> Contacto </a>
+
+        </nav>
+
+        <!-- Botones de iniciar sesion y registrarse -->
+
+        <div class="botones-autenticacion">
+
+            <button id="btn-sesion" class="boton-autenticacion">Iniciar Sesión</button>
+
+            <button id="btn-registrar" class="boton-autenticacion">Registrarse</button>
+
+        </div>
+
+        <!-- Avatar  -->
+
+        <div id="usuario-conectado" class="usuario-conectado" style="display: none;">
+
+            <div class="contenedor-avatar">
+
+                <div class="avatar" id="boton-avatar">
+                    <span id="iniciales-avatar"></span>
+
+                </div>
+
+                <!-- Menu despegable en el Avatar -->
+
+                <div class="menu-desplegable" id="menu-desplegable">
+
+                    <div class="encabezado-menu">
+                        <span id="nombre-menu"></span>
+                        <span id="rol-menu"></span>
+
+                    </div>
+
+                    <!-- Botones de ver perfil y cerrar sesión -->
+
+                    <button class="elemento-menu" id="btn-ver-perfil">Ver Perfil</button>
+
+                    <button class="elemento-menu" id="btn-cerrar-sesion">Cerrar Sesión</button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <button id="tema-btn" type="button" aria-label="Activar modo oscuro">🌙</button> <!-- Boton Modo Oscuro -->
+
+    </header>
+
+    <!-- Contenido principal de la pagina -->
+
+    <main id="main-content">
+
+        <!-- Hero -->
+
+        <section id="hero">
+
+            <h1> Club Deportivo GoD </h1>
+
+            <h3> Jugamos • Incluimos • Transformamos </h3>
+
+            <p id="frase-motivadora">
+
+                No se trata de las limitaciones, sino de la determinación.
+
+            </p>
+
+            <a href="#programas" class="boton">
+
+                Conoce nuestros programas
+
+            </a>
+
+        </section>
+
+        <!-- Hero -->
+
+        <!-- Información del Club -->
+
+        <div class="info-club">
+
+            <!-- Quienes somos -->
+
+            <section id="nosotros">
+
+                <h2> ¿Quiénes Somos? </h2>
+
+                <p>
+
+                    Somos un club de deporte adaptado comprometido con la inclusión, ofreciendo oportunidades deportivas
+                    a personas con discapacidad física, sensorial e intelectual.
+
+                </p>
+
+            </section>
+
+            <!-- Mision -->
+
+            <section id="mision">
+
+                <h2> Misión </h2>
+
+                <p>
+
+                    Promover el deporte adaptado como una herramienta para la inclusión, el bienestar y el desarrollo
+                    integral de las personas.
+
+                </p>
+
+            </section>
+
+            <!-- Visión -->
+
+            <section id="vision">
+
+                <h2> Visión </h2>
+
+                <p>
+
+                    Ser un club referente en deporte adaptado, reconocido por transformar vidas mediante el deporte y la
+                    inclusión.
+
+                </p>
+        </div>
+
+        </section>
+
+
+        <!-- Programas Deportivos -->
+
+        <section id="programas">
+
+            <h2> Nuestros Programas Deportivos </h2>
+
+            <div class="contenedor-programas">
+
+                <article>
+
+                    <h3> Fútbol 5 Visual </h3>
+
+                    <p>
+
+                        Disciplina dirigida a personas con discapacidad visual, promoviendo la integración y el trabajo
+                        en equipo.
+
+                    </p>
+
+                    <button type="button" class="boton boton-interes" data-programa="futbol">
+
+                        Me interesa
+
+                    </button>
+
+                </article>
+
+
+                <article>
+
+                    <h3> Baloncesto en Silla de Ruedas </h3>
+
+                    <p>
+
+                        Programa orientado al desarrollo tecnico, fisico y competitivo para deportistas usuarios de
+                        sillas de ruedas.
+
+                    </p>
+
+                    <button type="button" class="boton boton-interes" data-programa="baloncesto">
+
+                        Me interesa
+
+                    </button>
+
+                </article>
+
+
+                <article>
+
+                    <h3> Paraatletismo </h3>
+
+                    <p>
+
+                        Entrenamientos en pruebas de pista y campo adaptadas para diferentes tipos de discapacidad.
+
+                    </p>
+
+                    <button type="button" class="boton boton-interes" data-programa="paraatletismo">
+
+                        Me interesa
+
+                    </button>
+
+
+                </article>
+
+
+                <article>
+
+                    <h3> Paranatación </h3>
+
+                    <p>
+
+                        Formacion y entrenamiento en natación adaptada, fomentando el desarrollo de habilidades
+                        acuáticas.
+
+                    </p>
+
+                    <button type="button" class="boton boton-interes" data-programa="paranatacion">
+
+                        Me interesa
+
+                    </button>
+
+                </article>
+
+
+                <article>
+
+                    <h3> Boccia </h3>
+
+                    <p>
+
+                        Deporte de precision y estrategia, diseñado para personas con discapacidad física severa, que
+                        desarrolla estrategia y concentracion.
+
+                    </p>
+
+                    <button type="button" class="boton boton-interes" data-programa="boccia">
+
+                        Me interesa
+
+                    </button>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- Contacto -->
+
+        <section id="contacto">
+
+            <h2> Contáctanos </h2>
+
+            <p> <strong> Dirección: </strong> Cl. 9 #34-01, Cali, Valle del Cauca. </p>
+
+            <p> <strong> Teléfono: </strong> +57 311 795 5573 </p>
+
+            <p> <strong> Correo: </strong> clubgodgiron@gmail.com </p>
+
+
+            <!-- Formulario -->
+
+            <form>
+                <h3> Envíanos un mensaje </h3>
+
+                <label for="nombre"> Nombre </label>
+
+                <input type="text" id="nombre" name="nombre" required>
+
+                <label for="correo"> Correo electrónico </label>
+
+                <input type="email" id="correo" name="correo" required>
+
+                <label for="mensaje"> Mensaje </label>
+
+                <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
+
+                <input type="submit" value="Enviar">
+
+            </form>
+
+        </section>
+
+    </main>
+
+
+    <!-- Vista de Perfil -->
+
+    <div id="vista-perfil" style="display: none;">
+
+        <section id="perfil-completo">
+
+            <h2> Mi Perfil </h2>
+
+            <div class="contenedor-perfil">
+
+                <div class="avatar-perfil">
+
+                    <div class="avatar-grande">
+
+                        <span id="iniciales-perfil"></span>
+
+                    </div>
+
+                </div>
+
+                <!-- Información del Perfil -->
+
+                <div class="info-perfil">
+
+                    <h3 id="nombre-perfil"></h3>
+
+                    <p><strong>Correo:</strong> <span id="correo-perfil"></span></p>
+
+                    <p><strong>Rol:</strong> <span id="rol-perfil"></span></p>
+
+                    <p><strong>Fecha de registro:</strong> <span id="fecha-perfil"></span></p>
+
+                    <p><strong>Contraseña:</strong> <span id="contrasena-perfil">••••••••</span></p>
+
+                </div>
+
+            </div>
+
+            <!-- Botones para editar y volver a la página principal -->
+
+            <button id="btn-editar-perfil" class="boton">Editar Perfil</button>
+
+            <button id="btn-volver" class="boton">Volver al Inicio</button>
+
+        </section>
+
+    </div>
+
+
+    <!-- Modal de Iniciar Sesión -->
+
+    <div id="modal-sesion" class="modal">
+
+        <div class="modal-content">
+
+            <span class="modal-close">&times;</span>
+
+            <h2>Iniciar Sesión</h2>
+
+            <form id="formulario-sesion">
+
+                <label for="correo-sesion">Correo electrónico</label>
+                <input type="email" id="correo-sesion" name="correo" required>
+
+                <label for="contrasena-sesion">Contraseña</label>
+                <input type="password" id="contrasena-sesion" name="contrasena" required>
+
+                <input type="submit" value="Iniciar Sesión">
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- Modal de Registro -->
+
+    <div id="modal-registro" class="modal">
+
+        <div class="modal-content">
+
+            <span class="modal-close">&times;</span>
+
+            <h2>Registrarse</h2>
+
+            <form id="formulario-registro">
+
+                <label for="correo-registro">Correo electrónico</label>
+                <input type="email" id="correo-registro" name="correo" required>
+
+                <label for="nombre-registro">Nombre</label>
+                <input type="text" id="nombre-registro" name="nombre" required>
+
+                <label for="contrasena-registro">Contraseña</label>
+                <input type="password" id="contrasena-registro" name="contrasena" required>
+
+                <label for="rol-registro">Rol</label>
+                <select id="rol-registro" name="rol">
+
+                    <option value="deportista">Deportista</option>
+                    <option value="entrenador">Entrenador</option>
+                    <option value="administrador">Administrador</option>
+
+                </select>
+
+                <input type="submit" value="Registrarse">
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- Modal de Editar Perfil -->
+
+    <div id="modal-editar-perfil" class="modal">
+
+        <div class="modal-content">
+
+            <span class="modal-close">&times;</span>
+
+            <h2>Editar Perfil</h2>
+
+            <form id="formulario-editar-perfil">
+
+                <label for="nombre-editar">Nombre</label>
+                <input type="text" id="nombre-editar" name="nombre" required>
+
+                <label for="contrasena-actual-editar">Contraseña actual</label>
+                <input type="password" id="contrasena-actual-editar" name="contrasena_actual" required>
+
+                <label for="contrasena-nueva-editar">Nueva contraseña (dejar vacío para no cambiar)</label>
+                <input type="password" id="contrasena-nueva-editar" name="contrasena_nueva">
+
+                <input type="submit" value="Guardar Cambios">
+
+            </form>
+    
+        </div>
+        
+    </div>
+
+
+    <!--Pie de pagina-->
+
+    <footer>
+
+        <h3> Club Deportivo GoD </h3>
+
+        <p> Jugamos • Incluimos • Transformamos </p>
+
+        <p> No se trata de las limitaciones, sino de la determinación. </p>
+
+        <p> &copy; 2026 Club Deportivo GoD. Todos los derechos reservados. </p>
+
+    </footer>
+
+    <script src="js.js"> </script>
+
+</body>
+
+</html>
