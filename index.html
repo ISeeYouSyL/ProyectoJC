@@ -10,37 +10,94 @@
 
     <title> Club Deportivo GoD </title>
 
-    <link rel="stylesheet" href="./CSS/style.css">
+    <link rel="stylesheet" href="./style.css">
 
 </head>
 
-<div class="controles-texto" aria-label="Controles de tamaño de texto"> <!-- Botones Tamaño de Texto-->
+<div class="controles-texto" aria-label="Controles botones de ayuda"> <!-- Botones de ayuda-->
 
     <button id="disminuir-texto" type="button" aria-label="Disminuir tamaño de texto"> A- </button>
+
     <button id="aumentar-texto" type="button" aria-label="Aumentar tamaño de texto"> A+ </button>
+
+    <button id="fuente-dislexia" type="button" aria-pressed="false" aria-label="Activar fuente de dislexia">Aa</button>
+
+    <button id="alto-contraste" type="button" aria-pressed="false" aria-label="Activar alto contraste">◐</button>
+
+    <button id="modo-escuchar" type="button" aria-pressed="false"
+        aria-label="Escuchar el contenido de la página">🔊</button>
 
 </div>
 
 <body>
+
+    <div id="notificacion-global" class="notificacion-global"></div> <!-- Contenedor de notificaciones globales -->
 
     <!-- Inicio de la pagina -->
 
     <header>
 
         <button id="menu-btn"> <!-- Menu Hamburguesa para Celular -->
-            
-            ☰ 
 
-        </button> 
+            ☰
 
-        <img src="./Assets/God.png" alt="Escudo del Club Deportivo GoD" class="escudo">
+        </button>
+
+        <img src="./Assets/God.png" alt="Escudo del Club Deportivo GoD" class="escudo"> <!-- Escudo del Club -->
+
+        <!-- Barra de Navegacion -->
 
         <nav>
+
             <a href="#hero"> Inicio </a>
             <a href="#nosotros"> Nosotros </a>
             <a href="#programas"> Programas </a>
             <a href="#contacto"> Contacto </a>
+
         </nav>
+
+        <!-- Botones de iniciar sesion y registrarse -->
+
+        <div class="botones-autenticacion">
+
+            <button id="btn-sesion" class="boton-autenticacion">Iniciar Sesión</button>
+
+            <button id="btn-registrar" class="boton-autenticacion">Registrarse</button>
+
+        </div>
+
+        <!-- Avatar  -->
+
+        <div id="usuario-conectado" class="usuario-conectado" style="display: none;">
+
+            <div class="contenedor-avatar">
+
+                <div class="avatar" id="boton-avatar">
+                    <span id="iniciales-avatar"></span>
+
+                </div>
+
+                <!-- Menu despegable en el Avatar -->
+
+                <div class="menu-desplegable" id="menu-desplegable">
+
+                    <div class="encabezado-menu">
+                        <span id="nombre-menu"></span>
+                        <span id="rol-menu"></span>
+
+                    </div>
+
+                    <!-- Botones de ver perfil y cerrar sesión -->
+
+                    <button class="elemento-menu" id="btn-ver-perfil">Ver Perfil</button>
+
+                    <button class="elemento-menu" id="btn-cerrar-sesion">Cerrar Sesión</button>
+
+                </div>
+
+            </div>
+
+        </div>
 
         <button id="tema-btn" type="button" aria-label="Activar modo oscuro">🌙</button> <!-- Boton Modo Oscuro -->
 
@@ -48,7 +105,7 @@
 
     <!-- Contenido principal de la pagina -->
 
-    <main>
+    <main id="main-content">
 
         <!-- Hero -->
 
@@ -72,8 +129,11 @@
 
         </section>
 
-        <div class="info-club">
+        <!-- Hero -->
 
+        <!-- Información del Club -->
+
+        <div class="info-club">
 
             <!-- Quienes somos -->
 
@@ -144,9 +204,8 @@
                     <button type="button" class="boton boton-interes" data-programa="futbol">
 
                         Me interesa
-                        
+
                     </button>
-                    
 
                 </article>
 
@@ -202,7 +261,7 @@
 
                     </p>
 
-                    <button type="button" class="boton boton-interes" data-programa="paranatacion"> 
+                    <button type="button" class="boton boton-interes" data-programa="paranatacion">
 
                         Me interesa
 
@@ -274,6 +333,151 @@
     </main>
 
 
+    <!-- Vista de Perfil -->
+
+    <div id="vista-perfil" style="display: none;">
+
+        <section id="perfil-completo">
+
+            <h2> Mi Perfil </h2>
+
+            <div class="contenedor-perfil">
+
+                <div class="avatar-perfil">
+
+                    <div class="avatar-grande">
+
+                        <span id="iniciales-perfil"></span>
+
+                    </div>
+
+                </div>
+
+                <!-- Información del Perfil -->
+
+                <div class="info-perfil">
+
+                    <h3 id="nombre-perfil"></h3>
+
+                    <p><strong>Correo:</strong> <span id="correo-perfil"></span></p>
+
+                    <p><strong>Rol:</strong> <span id="rol-perfil"></span></p>
+
+                    <p><strong>Fecha de registro:</strong> <span id="fecha-perfil"></span></p>
+
+                    <p><strong>Contraseña:</strong> <span id="contrasena-perfil">••••••••</span></p>
+
+                </div>
+
+            </div>
+
+            <!-- Botones para editar y volver a la página principal -->
+
+            <button id="btn-editar-perfil" class="boton">Editar Perfil</button>
+
+            <button id="btn-volver" class="boton">Volver al Inicio</button>
+
+        </section>
+
+    </div>
+
+
+    <!-- Modal de Iniciar Sesión -->
+
+    <div id="modal-sesion" class="modal">
+
+        <div class="modal-content">
+
+            <span class="modal-close">&times;</span>
+
+            <h2>Iniciar Sesión</h2>
+
+            <form id="formulario-sesion">
+
+                <label for="correo-sesion">Correo electrónico</label>
+                <input type="email" id="correo-sesion" name="correo" required>
+
+                <label for="contrasena-sesion">Contraseña</label>
+                <input type="password" id="contrasena-sesion" name="contrasena" required>
+
+                <input type="submit" value="Iniciar Sesión">
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- Modal de Registro -->
+
+    <div id="modal-registro" class="modal">
+
+        <div class="modal-content">
+
+            <span class="modal-close">&times;</span>
+
+            <h2>Registrarse</h2>
+
+            <form id="formulario-registro">
+
+                <label for="correo-registro">Correo electrónico</label>
+                <input type="email" id="correo-registro" name="correo" required>
+
+                <label for="nombre-registro">Nombre</label>
+                <input type="text" id="nombre-registro" name="nombre" required>
+
+                <label for="contrasena-registro">Contraseña</label>
+                <input type="password" id="contrasena-registro" name="contrasena" required>
+
+                <label for="rol-registro">Rol</label>
+                <select id="rol-registro" name="rol">
+
+                    <option value="deportista">Deportista</option>
+                    <option value="entrenador">Entrenador</option>
+                    <option value="administrador">Administrador</option>
+
+                </select>
+
+                <input type="submit" value="Registrarse">
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- Modal de Editar Perfil -->
+
+    <div id="modal-editar-perfil" class="modal">
+
+        <div class="modal-content">
+
+            <span class="modal-close">&times;</span>
+
+            <h2>Editar Perfil</h2>
+
+            <form id="formulario-editar-perfil">
+
+                <label for="nombre-editar">Nombre</label>
+                <input type="text" id="nombre-editar" name="nombre" required>
+
+                <label for="contrasena-actual-editar">Contraseña actual</label>
+                <input type="password" id="contrasena-actual-editar" name="contrasena_actual" required>
+
+                <label for="contrasena-nueva-editar">Nueva contraseña (dejar vacío para no cambiar)</label>
+                <input type="password" id="contrasena-nueva-editar" name="contrasena_nueva">
+
+                <input type="submit" value="Guardar Cambios">
+
+            </form>
+    
+        </div>
+        
+    </div>
+
+
     <!--Pie de pagina-->
 
     <footer>
@@ -288,7 +492,7 @@
 
     </footer>
 
-    <script src="JS/js.js"> </script>
+    <script src="js.js"> </script>
 
 </body>
 
