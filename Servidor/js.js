@@ -5,30 +5,6 @@ const navegacion = document.querySelector("nav");
 const formulario = document.querySelector("form");
 
 
-// Menú hamburguesa para Celular //
-
-if (botonMenu && navegacion) {
-    botonMenu.addEventListener("click", function () {
-        const menuAbierto = navegacion.classList.toggle("active");
-
-        botonMenu.textContent = menuAbierto ? "×" : "☰";
-        botonMenu.setAttribute(
-            "aria-label",
-            menuAbierto ? "Cerrar menú" : "Abrir menú"
-        );
-    });
-
-    const enlaces = document.querySelectorAll("nav a");
-
-    enlaces.forEach(function (enlace) {
-        enlace.addEventListener("click", function () {
-            navegacion.classList.remove("active");
-            botonMenu.textContent = "☰";
-            botonMenu.setAttribute("aria-label", "Abrir menú");
-        });
-    });
-}
-
 
 // Mensajes del formulario //
 
@@ -295,6 +271,31 @@ if (botonEscuchar) {
 }
 
 
+// Menú hamburguesa para Celular //
+
+if (botonMenu && navegacion) {
+    botonMenu.addEventListener("click", function () {
+        const menuAbierto = navegacion.classList.toggle("active");
+
+        botonMenu.textContent = menuAbierto ? "×" : "☰";
+        botonMenu.setAttribute(
+            "aria-label",
+            menuAbierto ? "Cerrar menú" : "Abrir menú"
+        );
+    });
+
+    const enlaces = document.querySelectorAll("nav a");
+
+    enlaces.forEach(function (enlace) {
+        enlace.addEventListener("click", function () {
+            navegacion.classList.remove("active");
+            botonMenu.textContent = "☰";
+            botonMenu.setAttribute("aria-label", "Abrir menú");
+        });
+    });
+}
+
+
 // Modales de Autenticación //
 
 const btnLogin = document.getElementById("btn-login");
@@ -396,7 +397,6 @@ if (formRegister) {
 
 
 // Inicio de sesion //
-
 
 if (formLogin) {
     formLogin.addEventListener("submit", async function (evento) {
