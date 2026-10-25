@@ -1,0 +1,219 @@
+/* Header */
+
+header {
+    background-color: var(--color-secundario);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 20px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;  
+}
+
+/* Escudo */
+
+.escudo {
+    position: absolute;
+    width: 70px;
+    left: 40px;
+    top: 50%;
+    transform: translateY(-46%);
+    transition: transform .3s ease;
+    z-index: 1001;
+}
+
+.escudo:hover {
+    transform: translateY(-50%) rotate(8deg) scale(1.08);
+}
+
+/* Barra de navegacion */
+
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex: 1;
+    margin-left: 200px;
+}
+
+nav a {
+    position: relative;
+    color: white;
+    font-weight: bold;
+    transition: color .3s;
+}
+
+nav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+    width: 0;
+    height: 3px;
+    border-radius: 5px;
+    background-color: var(--color-primario);
+    transition: width .3s ease;
+}
+
+nav a:hover {
+    color: var(--color-primario);
+}
+
+nav a:hover::after {
+    width: 100%;
+}
+
+/* Menu y vista de perfil */
+
+.boton-autenticacion {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    background: linear-gradient(135deg, var(--color-primario), var(--color-acento));
+    color: white;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.boton-autenticacion:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.usuario-conectado span {
+    color: white;
+    font-weight: bold;
+}
+
+.botones-autenticacion, 
+.usuario-conectado {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 250px; 
+    justify-content: flex-end; 
+}
+
+.contenedor-avatar {
+    position: relative;
+}
+
+.avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-primario), var(--color-acento));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.avatar:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.avatar span {
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+}
+
+.menu-desplegable {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background-color: var(--color-blanco);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    min-width: 200px;
+    padding: 10px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.menu-desplegable.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.encabezado-menu {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 5px;
+}
+
+.encabezado-menu span {
+    display: block;
+    color: var(--color-texto);
+}
+
+.encabezado-menu span:first-child {
+    font-weight: bold;
+    font-size: 0.95rem;
+}
+
+.encabezado-menu span:last-child {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 2px;
+}
+
+.elemento-menu {
+    width: 100%;
+    padding: 12px 15px;
+    border: none;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    color: var(--color-texto);
+    transition: background-color 0.2s ease;
+}
+
+.elemento-menu:hover {
+    background-color: var(--color-fondo);
+}
+
+.elemento-menu:first-of-type {
+    color: var(--color-acento);
+}
+
+.elemento-menu:last-of-type {
+    color: var(--color-primario);
+    margin-top: 5px;
+}
+
+#tema-btn {
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 50%;
+    background-color: var(--color-secundario);
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+    transition: .3s ease;
+}
+
+#tema-btn:hover {
+    background-color: var(--color-primario);
+    transform: scale(1.1);
+}

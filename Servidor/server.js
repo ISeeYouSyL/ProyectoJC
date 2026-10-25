@@ -4,8 +4,9 @@ const express = require("express");
 const path = require("path");
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
-const cors = require("cors");
 const jwt = require("jsonwebtoken");
+const cors = require ("cors")
+
 
 
 // Importar la conexión y modelos //
@@ -22,12 +23,10 @@ const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(32).toString("he
 
 // Middlewares //
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({
-  origin: ['https://ISeeYouSyL.github.io', 'http://localhost:5173', 'http://localhost:3000'],
-  credentials: true
-}));
+
 
 // Funciones de autenticación y autorización //
 
