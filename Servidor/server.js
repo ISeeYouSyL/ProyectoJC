@@ -2,23 +2,59 @@
 
 const express = require("express");
 const path = require("path");
+const crypto = require("crypto");
+const bcrypt = require("bcryptjs");
+const cors = require("cors");
+const jwt = require("jsonwebtoken");
 
 
 // Importar la conexión y modelos //
 
-const { conectarDB, Programa, Mensaje, Usuario, programasIniciales } = require("./basedatos");
+const { conectarDB, Programa, Mensaje, Usuario, Evento, programasIniciales } = require("./basedatos");
 
 
 // Inicializamos Express //
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(32).toString("hex");
 
 
 // Middlewares //
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors({
+  origin: ['https://iseeyousyl.github.io', 'http://localhost:5173', 'http://localhost:3000'],
+  credentials: true
+}));
+
+// Funciones de autenticación y autorización //
+
+function autenticar(req, res, next) {
+  const token = req.headers.authorization?.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).json({ mensaje: "Debes iniciar sesión para realizar esta acción." });
+  }
+
+  try {
+    req.usuario = jwt.verify(token, JWT_SECRET);
+    next();
+  } catch (error) {
+    res.status(401).json({ mensaje: "Tu sesión no es válida. Inicia sesión nuevamente." });
+  }
+}
+
+// Middleware para verificar si el usuario es administrador //
+
+function soloAdministrador(req, res, next) {
+  if (req.usuario.rol !== "administrador") {
+    return res.status(403).json({ mensaje: "Esta acción es exclusiva para administradores." });
+  }
+
+  next();
+}
 
 
 // Servir los archivos estáticos del Frontend //
@@ -71,7 +107,7 @@ app.get("/api/programas/:codigo", async (req, res) => {
 
 // Crear nuevo programa //
 
-app.post("/api/programas", async (req, res) => {
+app.post("/api/programas", autenticar, soloAdministrador, async (req, res) => {
   try {
     const { codigo, nombre, descripcion } = req.body;
 
@@ -91,7 +127,7 @@ app.post("/api/programas", async (req, res) => {
 
 // Actualizar un programa existente //
 
-app.put("/api/programas/:id", async (req, res) => {
+app.put("/api/programas/:id", autenticar, soloAdministrador, async (req, res) => {
   try {
     const { id } = req.params;
     const { nombre, descripcion } = req.body;
@@ -115,7 +151,7 @@ app.put("/api/programas/:id", async (req, res) => {
 
 // Eliminar un programa //
 
-app.delete("/api/programas/:id", async (req, res) => {
+app.delete("/api/programas/:id", autenticar, soloAdministrador, async (req, res) => {
   try {
     const { id } = req.params;
     const eliminado = await Programa.findByIdAndDelete(id);
@@ -171,7 +207,7 @@ app.post("/api/mensajes", async (req, res) => {
 
 // Ver todos los mensajes (panel de administración) //
 
-app.get("/api/mensajes", async (req, res) => {
+app.get("/api/mensajes", autenticar, soloAdministrador, async (req, res) => {
   try {
     const mensajes = await Mensaje.find().sort({ fecha: -1 });
     res.status(200).json(mensajes);
@@ -181,8 +217,142 @@ app.get("/api/mensajes", async (req, res) => {
 });
 
 
-// Rutas de Autenticación //
+// Consultar usuarios para asignar deportistas (solo administrador) //
 
+app.get("/api/usuarios", autenticar, soloAdministrador, async (req, res) => {
+  try {
+    const usuarios = await Usuario.find()
+      .select("nombre correo rol entrenador")
+      .populate("entrenador", "nombre")
+      .sort({ nombre: 1 });
+    res.status(200).json(usuarios);
+  } catch (error) {
+    res.status(500).json({ mensaje: "Error al obtener usuarios.", error: error.message });
+  }
+});
+
+
+// Asignar un deportista a un entrenador (solo administrador) //
+
+app.put("/api/usuarios/:id/entrenador", autenticar, soloAdministrador, async (req, res) => {
+  try {
+    const { entrenadorId } = req.body;
+    const entrenador = await Usuario.findOne({ _id: entrenadorId, rol: "entrenador" });
+
+    if (!entrenador) {
+      return res.status(400).json({ mensaje: "Selecciona un entrenador válido." });
+    }
+
+    const deportista = await Usuario.findOneAndUpdate(
+      { _id: req.params.id, rol: "deportista" },
+      { entrenador: entrenadorId },
+      { new: true }
+    );
+
+    if (!deportista) {
+      return res.status(404).json({ mensaje: "Deportista no encontrado." });
+    }
+
+    res.status(200).json({ mensaje: "Deportista asignado correctamente." });
+  } catch (error) {
+    res.status(500).json({ mensaje: "Error al asignar deportista.", error: error.message });
+  }
+});
+
+
+// Deportistas asignados al entrenador que inició sesión //
+
+app.get("/api/deportistas", autenticar, async (req, res) => {
+  try {
+    if (req.usuario.rol !== "entrenador") {
+      return res.status(403).json({ mensaje: "Esta información es exclusiva para entrenadores." });
+    }
+
+    const deportistas = await Usuario.find({ rol: "deportista", entrenador: req.usuario.id })
+      .select("nombre correo")
+      .sort({ nombre: 1 });
+    res.status(200).json(deportistas);
+  } catch (error) {
+    res.status(500).json({ mensaje: "Error al obtener deportistas.", error: error.message });
+  }
+});
+
+
+// Consultar eventos según el rol //
+
+app.get("/api/eventos", autenticar, async (req, res) => {
+  try {
+    const usuario = await Usuario.findById(req.usuario.id);
+    let filtro = {};
+
+    if (req.usuario.rol === "entrenador") filtro = { entrenador: usuario._id };
+    if (req.usuario.rol === "deportista") {
+      if (!usuario.entrenador) {
+        return res.status(200).json([]);
+      }
+      filtro = { entrenador: usuario.entrenador };
+    }
+
+    const eventos = await Evento.find(filtro)
+      .populate("entrenador", "nombre")
+      .sort({ fecha: 1 });
+    res.status(200).json(eventos);
+  } catch (error) {
+    res.status(500).json({ mensaje: "Error al obtener eventos.", error: error.message });
+  }
+});
+
+
+// Crear evento (entrenador o administrador) //
+
+app.post("/api/eventos", autenticar, async (req, res) => {
+  try {
+    if (!["entrenador", "administrador"].includes(req.usuario.rol)) {
+      return res.status(403).json({ mensaje: "No tienes permiso para crear eventos." });
+    }
+
+    const { titulo, fecha, lugar, descripcion, tipo } = req.body;
+    if (!titulo || !fecha || !lugar) {
+      return res.status(400).json({ mensaje: "Título, fecha y lugar son requeridos." });
+    }
+
+    const evento = await Evento.create({
+      titulo,
+      fecha,
+      lugar,
+      descripcion,
+      tipo: tipo === "competencia" ? "competencia" : "entrenamiento",
+      entrenador: req.usuario.id
+    });
+
+    res.status(201).json({ mensaje: "Evento creado correctamente.", evento });
+  } catch (error) {
+    res.status(500).json({ mensaje: "Error al crear evento.", error: error.message });
+  }
+});
+
+
+// Eliminar evento propio o cualquier evento si es administrador //
+
+app.delete("/api/eventos/:id", autenticar, async (req, res) => {
+  try {
+    const evento = await Evento.findById(req.params.id);
+    if (!evento) return res.status(404).json({ mensaje: "Evento no encontrado." });
+
+    const esSuEvento = evento.entrenador.toString() === req.usuario.id;
+    if (req.usuario.rol !== "administrador" && !esSuEvento) {
+      return res.status(403).json({ mensaje: "No tienes permiso para eliminar este evento." });
+    }
+
+    await evento.deleteOne();
+    res.status(200).json({ mensaje: "Evento eliminado correctamente." });
+  } catch (error) {
+    res.status(500).json({ mensaje: "Error al eliminar evento.", error: error.message });
+  }
+});
+
+
+// Rutas de Autenticación //
 // Registrar nuevo usuario //
 
 app.post("/api/usuarios/registro", async (req, res) => {
@@ -210,7 +380,7 @@ app.post("/api/usuarios/registro", async (req, res) => {
       nombre,
       correo: correo.toLowerCase(),
       contrasena,
-      rol: rol || "deportista"
+      rol: rol === "entrenador" ? "entrenador" : "deportista"
     });
 
     const usuarioGuardado = await nuevoUsuario.save();
@@ -246,13 +416,22 @@ app.post("/api/usuarios/login", async (req, res) => {
       return res.status(401).json({ mensaje: "Este correo no está registrado en el sistema." });
     }
 
-    if (usuario.contrasena !== contrasena) {
+    const contrasenaValida = await bcrypt.compare(contrasena, usuario.contrasena);
+
+    if (!contrasenaValida) {
       return res.status(401).json({ mensaje: "La contraseña es incorrecta." });
     }
+
+    const token = jwt.sign(
+      { id: usuario._id, correo: usuario.correo, rol: usuario.rol },
+      JWT_SECRET,
+      { expiresIn: "8h" }
+    );
 
     res.status(200).json({
       exito: true,
       mensaje: "Sesión iniciada correctamente.",
+      token,
       usuario: {
         nombre: usuario.nombre,
         correo: usuario.correo,
@@ -267,28 +446,31 @@ app.post("/api/usuarios/login", async (req, res) => {
 
 // Actualizar perfil de usuario //
 
-app.put("/api/usuarios/perfil", async (req, res) => {
+app.put("/api/usuarios/perfil", autenticar, async (req, res) => {
   try {
-    const { correo, nombre, contrasena_actual, contrasena_nueva } = req.body;
+    const { nombre, contrasena_actual, contrasena_nueva } = req.body;
 
-    if (!correo || !nombre || !contrasena_actual) {
+    if (!nombre || !contrasena_actual) {
       return res.status(400).json({ mensaje: "Todos los campos son requeridos." });
     }
 
-    const usuario = await Usuario.findOne({ correo: correo.toLowerCase() });
+    const usuario = await Usuario.findOne({ correo: req.usuario.correo });
 
     if (!usuario) {
       return res.status(404).json({ mensaje: "Usuario no encontrado." });
     }
 
-    if (usuario.contrasena !== contrasena_actual) {
+    const contrasenaValida = await bcrypt.compare(contrasena_actual, usuario.contrasena);
+
+    if (!contrasenaValida) {
       return res.status(401).json({ mensaje: "La contraseña actual es incorrecta." });
     }
 
     usuario.nombre = nombre;
 
     if (contrasena_nueva && contrasena_nueva.length >= 6) {
-      usuario.contrasena = contrasena_nueva;
+      const salt = await bcrypt.genSalt(10);
+      usuario.contrasena = await bcrypt.hash(contrasena_nueva, salt);
     }
 
     const usuarioActualizado = await usuario.save();

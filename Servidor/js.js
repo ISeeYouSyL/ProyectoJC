@@ -211,7 +211,7 @@ if (botonFuenteDislexia) {
 
 // Alto contraste //
 
-const botonAltoContraste = document.getElementById("alto-contraste");
+const botonAltoContraste = document.getElementById("alto-contraste-btn");
 
 if (botonAltoContraste) {
     botonAltoContraste.addEventListener("click", function () {
@@ -228,7 +228,7 @@ if (botonAltoContraste) {
 
 // Modo escuchar //
 
-const botonEscuchar = document.getElementById("modo-escuchar");
+const botonEscuchar = document.getElementById("escuchar-btn");
 let lecturaActiva = false;
 
 function detenerLectura() {

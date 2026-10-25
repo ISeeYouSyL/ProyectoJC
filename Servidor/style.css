@@ -649,13 +649,20 @@ footer p {
 }
 
 
-/* Modo oscuro */
+/* Modo oscuro, alto contraste y modo escuchar */
 
-#tema-btn {
+.botones-tema {
     position: fixed;
     right: 25px;
     bottom: 25px;
     z-index: 1100;
+    display: flex;
+    gap: 10px;
+}
+
+#escuchar-btn,
+#alto-contraste-btn,
+#tema-btn {
     width: 48px;
     height: 48px;
     border: none;
@@ -668,9 +675,15 @@ footer p {
     transition: .3s ease;
 }
 
+#escuchar-btn:hover,
+#alto-contraste-btn:hover,
 #tema-btn:hover {
     background-color: var(--color-primario);
     transform: scale(1.1);
+}
+
+#escuchar-btn[aria-pressed="true"] {
+    background-color: var(--color-primario);
 }
 
 
@@ -733,7 +746,7 @@ body.fuente-dislexia button {
 }
 
 
-/* Alto contraste */
+/* Colores de Alto contraste */
 
 body.alto-contraste,
 body.alto-contraste #nosotros,
