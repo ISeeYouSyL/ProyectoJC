@@ -25,7 +25,7 @@ const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(32).toString("he
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-  origin: ['https://iseeyousyl.github.io', 'http://localhost:5173', 'http://localhost:3000'],
+  origin: ['https://ISeeYouSyL.github.io', 'http://localhost:5173', 'http://localhost:3000'],
   credentials: true
 }));
 
