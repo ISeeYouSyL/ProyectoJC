@@ -2,6 +2,7 @@
 
 import "./Header.css"
 import { useState, useEffect } from 'react'
+import escudo from "../Assets/God.png"
 
 // Componente Header //
 
@@ -38,7 +39,8 @@ function Header({ usuario, onLoginClick, onRegistroClick, onCerrarSesion, onVerP
   return (
     <header>
       <button id="menu-btn" onClick={toggleMenu}>☰</button>
-      <img src="src/Assets/God.png" alt="Escudo del Club Deportivo GoD" className="escudo" />
+      
+      <img src={escudo} alt="Escudo del Club Deportivo GoD" className="escudo" />
       
       <nav className={menuAbierto ? 'active' : ''}>
         <a href="#hero">Inicio</a>

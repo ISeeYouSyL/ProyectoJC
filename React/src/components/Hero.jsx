@@ -1,33 +1,37 @@
-// Componente Informacion del club //
+// importar react y hooks necesarios //
 
-function InfoClub() {
+import { useState, useEffect } from 'react'
+
+// Componente Hero //
+
+function Hero() {
+  const [frase, setFrase] = useState('')
+
+  const frases = [
+    "No se trata de las limitaciones, sino de la determinación.",
+    "El deporte nos une y nos hace más fuertes.",
+    "Cada entrenamiento es un paso hacia una meta.",
+    "La inclusión también se juega en equipo.",
+    "No hay límites para quien decide avanzar."
+  ]
+
+  useEffect(() => {
+    const posicionAleatoria = Math.floor(Math.random() * frases.length)
+    setFrase(frases[posicionAleatoria])
+  }, [])
+
+  // Renderizado del componente //
+
   return (
-    <div className="info-club">
-      <section id="nosotros">
-        <h2>¿Quiénes Somos?</h2>
-        <p>
-          Somos un club de deporte adaptado comprometido con la inclusión, ofreciendo oportunidades deportivas
-          a personas con discapacidad física, sensorial e intelectual.
-        </p>
-      </section>
-
-      <section id="mision">
-        <h2>Misión</h2>
-        <p>
-          Promover el deporte adaptado como una herramienta para la inclusión, el bienestar y el desarrollo
-          integral de las personas.
-        </p>
-      </section>
-
-      <section id="vision">
-        <h2>Visión</h2>
-        <p>
-          Ser un club referente en deporte adaptado, reconocido por transformar vidas mediante el deporte y la
-          inclusión.
-        </p>
-      </section>
-    </div>
+    <section id="hero">
+      <h1>Club Deportivo GoD</h1>
+      <h3>Jugamos • Incluimos • Transformamos</h3>
+      <p id="frase-motivadora">{frase}</p>
+      <a href="#programas" className="boton">
+        Conoce nuestros programas
+      </a>
+    </section>
   )
 }
 
-export default InfoClub
+export default Hero
