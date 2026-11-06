@@ -45,22 +45,6 @@ const usuarioSchema = new mongoose.Schema({
 });
 
 
-// Middleware para encriptar contraseña antes de guardar //
-
-usuarioSchema.pre('save', async function(next) {
-  if (!this.isModified('contrasena')) {
-    return next();
-  }
-
-  try {
-    const salt = await bcrypt.genSalt(10);
-    this.contrasena = await bcrypt.hash(this.contrasena, salt);
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
-
 const Usuario = mongoose.model("Usuario", usuarioSchema);
 
 
