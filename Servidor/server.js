@@ -2,7 +2,6 @@
 
 const express = require("express");
 const path = require("path");
-const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cors = require ("cors")
@@ -291,15 +290,21 @@ app.get("/api/deportistas", autenticar, async (req, res) => {
 
 app.get("/api/eventos", autenticar, async (req, res) => {
   try {
-    const mongoose = require("mongoose");
+    const usuario = await Usuario.findById(req.usuario.id).exec();
+
+    // Validar si el usuario del token existe en MongoDB
+    if (!usuario) {
+      return res.status(401).json({ mensaje: "Usuario no encontrado. Inicia sesión de nuevo." });
+    }
+
     let filtro = {};
 
     if (req.usuario.rol === "entrenador") {
-      filtro = { entrenador: new mongoose.Types.ObjectId(req.usuario.id) };
+      filtro = { entrenador: usuario._id };
     }
+
     if (req.usuario.rol === "deportista") {
-      const usuario = await Usuario.findById(req.usuario.id).exec();
-      if (!usuario || !usuario.entrenador) {
+      if (!usuario.entrenador) {
         return res.status(200).json([]);
       }
       filtro = { entrenador: usuario.entrenador };
@@ -308,12 +313,13 @@ app.get("/api/eventos", autenticar, async (req, res) => {
     const eventos = await Evento.find(filtro)
       .populate("entrenador", "nombre")
       .sort({ fecha: 1 });
+
     res.status(200).json(eventos);
   } catch (error) {
+    console.error("Error al obtener eventos:", error);
     res.status(500).json({ mensaje: "Error al obtener eventos.", error: error.message });
   }
 });
-
 
 // Crear evento (entrenador o administrador) //
 
@@ -328,14 +334,18 @@ app.post("/api/eventos", autenticar, async (req, res) => {
       return res.status(400).json({ mensaje: "Título, fecha y lugar son requeridos." });
     }
 
-    const mongoose = require("mongoose");
+    const usuario = await Usuario.findById(req.usuario.id).exec();
+    if (!usuario) {
+      return res.status(404).json({ mensaje: "Usuario no encontrado." });
+    }
+
     const evento = await Evento.create({
       titulo,
       fecha,
       lugar,
       descripcion,
       tipo: tipo === "competencia" ? "competencia" : "entrenamiento",
-      entrenador: new mongoose.Types.ObjectId(req.usuario.id)
+      entrenador: usuario._id
     });
 
     res.status(201).json({ mensaje: "Evento creado correctamente.", evento });
