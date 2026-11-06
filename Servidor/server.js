@@ -291,9 +291,12 @@ app.get("/api/deportistas", autenticar, async (req, res) => {
 
 app.get("/api/eventos", autenticar, async (req, res) => {
   try {
+    const mongoose = require("mongoose");
     let filtro = {};
 
-    if (req.usuario.rol === "entrenador") filtro = { entrenador: req.usuario.id };
+    if (req.usuario.rol === "entrenador") {
+      filtro = { entrenador: new mongoose.Types.ObjectId(req.usuario.id) };
+    }
     if (req.usuario.rol === "deportista") {
       const usuario = await Usuario.findById(req.usuario.id).exec();
       if (!usuario || !usuario.entrenador) {
@@ -325,13 +328,14 @@ app.post("/api/eventos", autenticar, async (req, res) => {
       return res.status(400).json({ mensaje: "Título, fecha y lugar son requeridos." });
     }
 
+    const mongoose = require("mongoose");
     const evento = await Evento.create({
       titulo,
       fecha,
       lugar,
       descripcion,
       tipo: tipo === "competencia" ? "competencia" : "entrenamiento",
-      entrenador: req.usuario.id
+      entrenador: new mongoose.Types.ObjectId(req.usuario.id)
     });
 
     res.status(201).json({ mensaje: "Evento creado correctamente.", evento });
