@@ -8,7 +8,6 @@ const jwt = require("jsonwebtoken");
 const cors = require ("cors")
 
 
-
 // Importar la conexión y modelos //
 
 const { conectarDB, Programa, Mensaje, Usuario, Evento, programasIniciales } = require("./basedatos");
@@ -18,7 +17,7 @@ const { conectarDB, Programa, Mensaje, Usuario, Evento, programasIniciales } = r
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(32).toString("hex");
+const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(10).toString("hex");
 
 
 // Middlewares //
@@ -354,49 +353,7 @@ app.delete("/api/eventos/:id", autenticar, async (req, res) => {
 // Rutas de Autenticación //
 // Registrar nuevo usuario //
 
-app.post("/api/usuarios/registro", async (req, res) => {
-  try {
-    const { nombre, correo, contrasena, rol } = req.body;
-
-    if (!nombre || nombre.length < 3) {
-      return res.status(400).json({ mensaje: "El nombre debe tener al menos 3 caracteres." });
-    }
-
-    if (!correo || !correo.includes("@")) {
-      return res.status(400).json({ mensaje: "Ingresa un correo electrónico válido." });
-    }
-
-    if (!contrasena || contrasena.length < 6) {
-      return res.status(400).json({ mensaje: "La contraseña debe tener al menos 6 caracteres." });
-    }
-
-    const usuarioExistente = await Usuario.findOne({ correo: correo.toLowerCase() });
-    if (usuarioExistente) {
-      return res.status(400).json({ mensaje: "Este correo ya está registrado." });
-    }
-
-    const nuevoUsuario = new Usuario({
-      nombre,
-      correo: correo.toLowerCase(),
-      contrasena,
-      rol: rol === "entrenador" ? "entrenador" : "deportista"
-    });
-
-    const usuarioGuardado = await nuevoUsuario.save();
-
-    res.status(201).json({
-      exito: true,
-      mensaje: "¡Registro exitoso! Ahora puedes iniciar sesión.",
-      usuario: {
-        nombre: usuarioGuardado.nombre,
-        correo: usuarioGuardado.correo,
-        rol: usuarioGuardado.rol
-      }
-    });
-  } catch (error) {
-    res.status(500).json({ mensaje: "Error al registrar usuario.", error: error.message });
-  }
-});
+PAPAHERMOSO1
 
 
 // Iniciar sesión //
