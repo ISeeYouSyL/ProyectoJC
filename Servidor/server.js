@@ -18,7 +18,7 @@ const { conectarDB, Programa, Mensaje, Usuario, Evento, programasIniciales } = r
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(32).toString("hex");
+const JWT_SECRET = process.env.JWT_SECRET || "club-deportivo-god-secret-key-2024";
 
 
 // Middlewares //
