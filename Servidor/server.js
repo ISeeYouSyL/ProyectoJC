@@ -393,18 +393,19 @@ app.post("/api/usuarios/registro", async (req, res) => {
       return res.status(400).json({ mensaje: "Este correo ya está registrado." });
     }
 
+    // 1. Encriptar la contraseña con bcrypt antes de crear el objeto
+    const salt = await bcrypt.genSalt(10);
+    const contrasenaEncriptada = await bcrypt.hash(contrasena, salt);
+
+    // 2. Crear y guardar el usuario con la contraseña ENCRIPTADA
     const nuevoUsuario = new Usuario({
       nombre,
       correo: correo.toLowerCase(),
-      contrasena,
+      contrasena: contrasenaEncriptada,
       rol: rol === "entrenador" ? "entrenador" : "deportista"
     });
 
     const usuarioGuardado = await nuevoUsuario.save();
-
-    if (!usuarioGuardado) {
-      return res.status(500).json({ mensaje: "Error al guardar el usuario." });
-    }
 
     res.status(201).json({
       exito: true,
@@ -416,6 +417,7 @@ app.post("/api/usuarios/registro", async (req, res) => {
       }
     });
   } catch (error) {
+    console.error("Error al registrar usuario:", error);
     res.status(500).json({ mensaje: "Error al registrar usuario.", error: error.message });
   }
 });
