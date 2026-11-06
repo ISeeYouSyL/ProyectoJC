@@ -8,6 +8,7 @@ const jwt = require("jsonwebtoken");
 const cors = require ("cors")
 
 
+
 // Importar la conexión y modelos //
 
 const { conectarDB, Programa, Mensaje, Usuario, Evento, programasIniciales } = require("./basedatos");
@@ -17,7 +18,7 @@ const { conectarDB, Programa, Mensaje, Usuario, Evento, programasIniciales } = r
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(10).toString("hex");
+const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(32).toString("hex");
 
 
 // Middlewares //
@@ -235,7 +236,12 @@ app.get("/api/usuarios", autenticar, soloAdministrador, async (req, res) => {
 app.put("/api/usuarios/:id/entrenador", autenticar, soloAdministrador, async (req, res) => {
   try {
     const { entrenadorId } = req.body;
-    const entrenador = await Usuario.findOne({ _id: entrenadorId, rol: "entrenador" });
+
+    if (!entrenadorId) {
+      return res.status(400).json({ mensaje: "Debes seleccionar un entrenador." });
+    }
+
+    const entrenador = await Usuario.findOne({ _id: entrenadorId, rol: "entrenador" }).exec();
 
     if (!entrenador) {
       return res.status(400).json({ mensaje: "Selecciona un entrenador válido." });
@@ -243,9 +249,9 @@ app.put("/api/usuarios/:id/entrenador", autenticar, soloAdministrador, async (re
 
     const deportista = await Usuario.findOneAndUpdate(
       { _id: req.params.id, rol: "deportista" },
-      { entrenador: entrenadorId },
+      { entrenador: entrenador._id },
       { new: true }
-    );
+    ).exec();
 
     if (!deportista) {
       return res.status(404).json({ mensaje: "Deportista no encontrado." });
@@ -266,7 +272,12 @@ app.get("/api/deportistas", autenticar, async (req, res) => {
       return res.status(403).json({ mensaje: "Esta información es exclusiva para entrenadores." });
     }
 
-    const deportistas = await Usuario.find({ rol: "deportista", entrenador: req.usuario.id })
+    const usuario = await Usuario.findById(req.usuario.id).exec();
+    if (!usuario) {
+      return res.status(404).json({ mensaje: "Usuario no encontrado." });
+    }
+
+    const deportistas = await Usuario.find({ rol: "deportista", entrenador: usuario._id })
       .select("nombre correo")
       .sort({ nombre: 1 });
     res.status(200).json(deportistas);
@@ -278,25 +289,14 @@ app.get("/api/deportistas", autenticar, async (req, res) => {
 
 // Consultar eventos según el rol //
 
-// Consultar eventos según el rol //
-
 app.get("/api/eventos", autenticar, async (req, res) => {
   try {
-    const usuario = await Usuario.findById(req.usuario.id);
-
-    // 🛡️ PROTECCIÓN ANTI-CRASH: Si el usuario del token ya no existe en la BD
-    if (!usuario) {
-      return res.status(401).json({ mensaje: "Sesión no válida o usuario no encontrado. Por favor inicia sesión de nuevo." });
-    }
-
+    const usuario = await Usuario.findById(req.usuario.id).exec();
     let filtro = {};
 
-    if (req.usuario.rol === "entrenador") {
-      filtro = { entrenador: usuario._id };
-    }
-    
+    if (req.usuario.rol === "entrenador") filtro = { entrenador: usuario._id };
     if (req.usuario.rol === "deportista") {
-      if (!usuario.entrenador) {
+      if (!usuario || !usuario.entrenador) {
         return res.status(200).json([]);
       }
       filtro = { entrenador: usuario.entrenador };
@@ -305,13 +305,12 @@ app.get("/api/eventos", autenticar, async (req, res) => {
     const eventos = await Evento.find(filtro)
       .populate("entrenador", "nombre")
       .sort({ fecha: 1 });
-
     res.status(200).json(eventos);
   } catch (error) {
-    console.error("Error exacto en backend:", error);
     res.status(500).json({ mensaje: "Error al obtener eventos.", error: error.message });
   }
 });
+
 
 // Crear evento (entrenador o administrador) //
 
@@ -326,13 +325,18 @@ app.post("/api/eventos", autenticar, async (req, res) => {
       return res.status(400).json({ mensaje: "Título, fecha y lugar son requeridos." });
     }
 
+    const usuario = await Usuario.findById(req.usuario.id).exec();
+    if (!usuario) {
+      return res.status(404).json({ mensaje: "Usuario no encontrado." });
+    }
+
     const evento = await Evento.create({
       titulo,
       fecha,
       lugar,
       descripcion,
       tipo: tipo === "competencia" ? "competencia" : "entrenamiento",
-      entrenador: req.usuario.id
+      entrenador: usuario._id
     });
 
     res.status(201).json({ mensaje: "Evento creado correctamente.", evento });
@@ -346,10 +350,13 @@ app.post("/api/eventos", autenticar, async (req, res) => {
 
 app.delete("/api/eventos/:id", autenticar, async (req, res) => {
   try {
-    const evento = await Evento.findById(req.params.id);
+    const evento = await Evento.findById(req.params.id).exec();
     if (!evento) return res.status(404).json({ mensaje: "Evento no encontrado." });
 
-    const esSuEvento = evento.entrenador.toString() === req.usuario.id;
+    const usuario = await Usuario.findById(req.usuario.id).exec();
+    if (!usuario) return res.status(404).json({ mensaje: "Usuario no encontrado." });
+
+    const esSuEvento = evento.entrenador.toString() === usuario._id.toString();
     if (req.usuario.rol !== "administrador" && !esSuEvento) {
       return res.status(403).json({ mensaje: "No tienes permiso para eliminar este evento." });
     }
@@ -363,8 +370,6 @@ app.delete("/api/eventos/:id", autenticar, async (req, res) => {
 
 
 // Rutas de Autenticación //
-// Registrar nuevo usuario //
-
 // Registrar nuevo usuario //
 
 app.post("/api/usuarios/registro", async (req, res) => {
@@ -388,18 +393,18 @@ app.post("/api/usuarios/registro", async (req, res) => {
       return res.status(400).json({ mensaje: "Este correo ya está registrado." });
     }
 
-    // Encriptar la contraseña antes de guardar
-    const salt = await bcrypt.genSalt(10);
-    const contrasenaEncriptada = await bcrypt.hash(contrasena, salt);
-
     const nuevoUsuario = new Usuario({
       nombre,
       correo: correo.toLowerCase(),
-      contrasena: contrasenaEncriptada,
+      contrasena,
       rol: rol === "entrenador" ? "entrenador" : "deportista"
     });
 
     const usuarioGuardado = await nuevoUsuario.save();
+
+    if (!usuarioGuardado) {
+      return res.status(500).json({ mensaje: "Error al guardar el usuario." });
+    }
 
     res.status(201).json({
       exito: true,
