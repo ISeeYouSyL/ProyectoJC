@@ -280,7 +280,7 @@ app.get("/api/deportistas", autenticar, async (req, res) => {
 
 // Consultar eventos según el rol //
 
-pp.get("/api/eventos", autenticar, async (req, res) => {
+app.get("/api/eventos", autenticar, async (req, res) => {
   try {
     const usuario = await Usuario.findById(req.usuario.id);
 
