@@ -292,11 +292,20 @@ app.get("/api/deportistas", autenticar, async (req, res) => {
 app.get("/api/eventos", autenticar, async (req, res) => {
   try {
     const usuario = await Usuario.findById(req.usuario.id).exec();
+
+    // 🛡️ Si el token es viejo y el usuario ya no existe en la BD
+    if (!usuario) {
+      return res.status(401).json({ mensaje: "Sesión no encontrada. Por favor inicia sesión de nuevo." });
+    }
+
     let filtro = {};
 
-    if (req.usuario.rol === "entrenador") filtro = { entrenador: usuario._id };
+    if (req.usuario.rol === "entrenador") {
+      filtro = { entrenador: usuario._id };
+    }
+    
     if (req.usuario.rol === "deportista") {
-      if (!usuario || !usuario.entrenador) {
+      if (!usuario.entrenador) {
         return res.status(200).json([]);
       }
       filtro = { entrenador: usuario.entrenador };
@@ -305,6 +314,7 @@ app.get("/api/eventos", autenticar, async (req, res) => {
     const eventos = await Evento.find(filtro)
       .populate("entrenador", "nombre")
       .sort({ fecha: 1 });
+
     res.status(200).json(eventos);
   } catch (error) {
     res.status(500).json({ mensaje: "Error al obtener eventos.", error: error.message });
