@@ -40,7 +40,20 @@ const usuarioSchema = new mongoose.Schema({
   correo: { type: String, required: true, unique: true, trim: true },
   contrasena: { type: String, required: true },
   rol: { type: String, required: true, enum: ["administrador", "entrenador", "deportista"], default: "deportista" },
+  entrenador: { type: mongoose.Schema.Types.ObjectId, ref: "Usuario", default: null },
   fechaRegistro: { type: Date, default: Date.now }
+});
+
+
+// Middleware para encriptar contraseña antes de guardar //
+
+usuarioSchema.pre('save', async function() {
+  if (!this.isModified('contrasena')) {
+    return;
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  this.contrasena = await bcrypt.hash(this.contrasena, salt);
 });
 
 const Usuario = mongoose.model("Usuario", usuarioSchema);
