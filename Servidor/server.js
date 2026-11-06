@@ -395,14 +395,11 @@ app.post("/api/usuarios/registro", async (req, res) => {
       return res.status(400).json({ mensaje: "Este correo ya está registrado." });
     }
 
-    // Generar salt y encriptar contraseña
-    const salt = await bcrypt.genSalt(10);
-    const contrasenaEncriptada = await bcrypt.hash(contrasena, salt);
-
+    // Le pasamos 'contrasena' directa porque usuarioSchema.pre('save') en basedatos.js se encarga de aplicar el hash de forma transparente
     const nuevoUsuario = new Usuario({
       nombre,
       correo: correo.toLowerCase(),
-      contrasena: contrasenaEncriptada,
+      contrasena,
       rol: rol === "entrenador" ? "entrenador" : "deportista"
     });
 
