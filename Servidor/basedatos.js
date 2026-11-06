@@ -47,6 +47,19 @@ const usuarioSchema = new mongoose.Schema({
 
 const Usuario = mongoose.model("Usuario", usuarioSchema);
 
+// Esquema de eventos //
+
+const eventoSchema = new mongoose.Schema({
+  titulo: { type: String, required: true, trim: true },
+  fecha: { type: Date, required: true },
+  lugar: { type: String, required: true, trim: true },
+  descripcion: { type: String, default: "" },
+  tipo: { type: String, enum: ["entrenamiento", "competencia"], default: "entrenamiento" },
+  entrenador: { type: mongoose.Schema.Types.ObjectId, ref: "Usuario", required: true }
+}, { timestamps: true });
+
+const Evento = mongoose.model("Evento", eventoSchema);
+
 
 // Datos por defecto para sembrar la base de datos la primera vez //
 
@@ -114,5 +127,6 @@ module.exports = {
   Programa,
   Mensaje,
   Usuario,
+  Evento,
   programasIniciales
 };
