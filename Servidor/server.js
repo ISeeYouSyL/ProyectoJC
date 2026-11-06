@@ -393,10 +393,14 @@ app.post("/api/usuarios/registro", async (req, res) => {
       return res.status(400).json({ mensaje: "Este correo ya está registrado." });
     }
 
+    // 🔒 Encriptar la contraseña directamente aquí en el servidor
+    const salt = await bcrypt.genSalt(10);
+    const contrasenaEncriptada = await bcrypt.hash(contrasena, salt);
+
     const nuevoUsuario = new Usuario({
       nombre,
       correo: correo.toLowerCase(),
-      contrasena, // 👈 Mongoose se encarga de encriptarla en el hook pre('save')
+      contrasena: contrasenaEncriptada,
       rol: rol === "entrenador" ? "entrenador" : "deportista"
     });
 
