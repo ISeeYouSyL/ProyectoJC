@@ -292,20 +292,11 @@ app.get("/api/deportistas", autenticar, async (req, res) => {
 app.get("/api/eventos", autenticar, async (req, res) => {
   try {
     const usuario = await Usuario.findById(req.usuario.id).exec();
-
-    // 🛡️ Si el token es viejo y el usuario ya no existe en la BD
-    if (!usuario) {
-      return res.status(401).json({ mensaje: "Sesión no encontrada. Por favor inicia sesión de nuevo." });
-    }
-
     let filtro = {};
 
-    if (req.usuario.rol === "entrenador") {
-      filtro = { entrenador: usuario._id };
-    }
-    
+    if (req.usuario.rol === "entrenador") filtro = { entrenador: usuario._id };
     if (req.usuario.rol === "deportista") {
-      if (!usuario.entrenador) {
+      if (!usuario || !usuario.entrenador) {
         return res.status(200).json([]);
       }
       filtro = { entrenador: usuario.entrenador };
@@ -314,7 +305,6 @@ app.get("/api/eventos", autenticar, async (req, res) => {
     const eventos = await Evento.find(filtro)
       .populate("entrenador", "nombre")
       .sort({ fecha: 1 });
-
     res.status(200).json(eventos);
   } catch (error) {
     res.status(500).json({ mensaje: "Error al obtener eventos.", error: error.message });
@@ -335,18 +325,13 @@ app.post("/api/eventos", autenticar, async (req, res) => {
       return res.status(400).json({ mensaje: "Título, fecha y lugar son requeridos." });
     }
 
-    const usuario = await Usuario.findById(req.usuario.id).exec();
-    if (!usuario) {
-      return res.status(404).json({ mensaje: "Usuario no encontrado." });
-    }
-
     const evento = await Evento.create({
       titulo,
       fecha,
       lugar,
       descripcion,
       tipo: tipo === "competencia" ? "competencia" : "entrenamiento",
-      entrenador: usuario._id
+      entrenador: req.usuario.id
     });
 
     res.status(201).json({ mensaje: "Evento creado correctamente.", evento });
@@ -403,18 +388,18 @@ app.post("/api/usuarios/registro", async (req, res) => {
       return res.status(400).json({ mensaje: "Este correo ya está registrado." });
     }
 
-    // 🔒 Encriptar la contraseña directamente aquí en el servidor
-    const salt = await bcrypt.genSalt(10);
-    const contrasenaEncriptada = await bcrypt.hash(contrasena, salt);
-
     const nuevoUsuario = new Usuario({
       nombre,
       correo: correo.toLowerCase(),
-      contrasena: contrasenaEncriptada,
+      contrasena,
       rol: rol === "entrenador" ? "entrenador" : "deportista"
     });
 
     const usuarioGuardado = await nuevoUsuario.save();
+
+    if (!usuarioGuardado) {
+      return res.status(500).json({ mensaje: "Error al guardar el usuario." });
+    }
 
     res.status(201).json({
       exito: true,
@@ -427,7 +412,8 @@ app.post("/api/usuarios/registro", async (req, res) => {
     });
   } catch (error) {
     console.error("Error al registrar usuario:", error);
-    res.status(500).json({ mensaje: "Error al registrar usuario.", error: error.message });
+    console.error("Detalles del error:", error.stack);
+    res.status(500).json({ mensaje: "Error al registrar usuario.", error: error.message, detalles: error.stack });
   }
 });
 
@@ -448,7 +434,16 @@ app.post("/api/usuarios/login", async (req, res) => {
       return res.status(401).json({ mensaje: "Este correo no está registrado en el sistema." });
     }
 
-    const contrasenaValida = await bcrypt.compare(contrasena, usuario.contrasena);
+    let contrasenaValida = false;
+    try {
+      contrasenaValida = await bcrypt.compare(contrasena, usuario.contrasena);
+    } catch {
+      contrasenaValida = false;
+    }
+
+    if (!contrasenaValida) {
+      contrasenaValida = contrasena === usuario.contrasena;
+    }
 
     if (!contrasenaValida) {
       return res.status(401).json({ mensaje: "La contraseña es incorrecta." });
