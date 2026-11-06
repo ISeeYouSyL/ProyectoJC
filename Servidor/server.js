@@ -372,6 +372,8 @@ app.delete("/api/eventos/:id", autenticar, async (req, res) => {
 // Rutas de Autenticación //
 // Registrar nuevo usuario //
 
+// Registrar nuevo usuario //
+
 app.post("/api/usuarios/registro", async (req, res) => {
   try {
     const { nombre, correo, contrasena, rol } = req.body;
@@ -393,11 +395,10 @@ app.post("/api/usuarios/registro", async (req, res) => {
       return res.status(400).json({ mensaje: "Este correo ya está registrado." });
     }
 
-    // 1. Encriptar la contraseña con bcrypt antes de crear el objeto
+    // Generar salt y encriptar contraseña
     const salt = await bcrypt.genSalt(10);
     const contrasenaEncriptada = await bcrypt.hash(contrasena, salt);
 
-    // 2. Crear y guardar el usuario con la contraseña ENCRIPTADA
     const nuevoUsuario = new Usuario({
       nombre,
       correo: correo.toLowerCase(),
