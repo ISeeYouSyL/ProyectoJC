@@ -280,14 +280,13 @@ app.get("/api/deportistas", autenticar, async (req, res) => {
 
 // Consultar eventos según el rol //
 
-app.get("/api/eventos", autenticar, async (req, res) => {
+pp.get("/api/eventos", autenticar, async (req, res) => {
   try {
     const usuario = await Usuario.findById(req.usuario.id);
 
-    // Si el usuario del token ya no existe en la BD, se pide iniciar sesión limpiamente //
-
+    // 🛡️ PROTECCIÓN ANTI-CRASH: Si el usuario del token ya no existe en la BD
     if (!usuario) {
-      return res.status(401).json({ mensaje: "Tu usuario no existe o la sesión expiró. Inicia sesión de nuevo." });
+      return res.status(401).json({ mensaje: "Sesión no válida o usuario no encontrado. Por favor inicia sesión de nuevo." });
     }
 
     let filtro = {};
@@ -309,10 +308,10 @@ app.get("/api/eventos", autenticar, async (req, res) => {
 
     res.status(200).json(eventos);
   } catch (error) {
+    console.error("Error exacto en backend:", error);
     res.status(500).json({ mensaje: "Error al obtener eventos.", error: error.message });
   }
 });
-
 
 // Crear evento (entrenador o administrador) //
 
