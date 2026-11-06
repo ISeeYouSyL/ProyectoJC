@@ -281,9 +281,18 @@ app.get("/api/deportistas", autenticar, async (req, res) => {
 app.get("/api/eventos", autenticar, async (req, res) => {
   try {
     const usuario = await Usuario.findById(req.usuario.id);
+
+   
+    if (!usuario) {
+      return res.status(401).json({ mensaje: "Usuario no encontrado. Inicia sesión de nuevo." });
+    }
+
     let filtro = {};
 
-    if (req.usuario.rol === "entrenador") filtro = { entrenador: usuario._id };
+    if (req.usuario.rol === "entrenador") {
+      filtro = { entrenador: usuario._id };
+    }
+    
     if (req.usuario.rol === "deportista") {
       if (!usuario.entrenador) {
         return res.status(200).json([]);
@@ -294,8 +303,10 @@ app.get("/api/eventos", autenticar, async (req, res) => {
     const eventos = await Evento.find(filtro)
       .populate("entrenador", "nombre")
       .sort({ fecha: 1 });
+
     res.status(200).json(eventos);
   } catch (error) {
+    console.error("Error en eventos:", error);
     res.status(500).json({ mensaje: "Error al obtener eventos.", error: error.message });
   }
 });

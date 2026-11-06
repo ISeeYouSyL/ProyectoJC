@@ -2,6 +2,11 @@
 
 import { useEffect, useState } from 'react'
 
+// Definir URL del backend para conectarlo en gitpages //
+
+const API_URL = import.meta.env.VITE_API_URL || "https://proyectojc.onrender.com"
+
+
 // Componente de Panel del Entrenador //
 
 function PanelEntrenador({ token, onCerrar, mostrarNotificacion }) {
@@ -19,8 +24,8 @@ function PanelEntrenador({ token, onCerrar, mostrarNotificacion }) {
   const cargarDatos = async () => {
     try {
       const [respuestaDeportistas, respuestaEventos] = await Promise.all([
-        fetch('http://localhost:3000/api/deportistas', { headers: encabezados }),
-        fetch('http://localhost:3000/api/eventos', { headers: encabezados })
+        fetch(`${API_URL}/api/deportistas`, { headers: encabezados }),
+        fetch(`${API_URL}/api/eventos`, { headers: encabezados })
       ])
       setDeportistas(await respuestaDeportistas.json())
       setEventos(await respuestaEventos.json())
@@ -33,7 +38,7 @@ function PanelEntrenador({ token, onCerrar, mostrarNotificacion }) {
 
   const crearEvento = async (e) => {
     e.preventDefault()
-    const respuesta = await fetch('http://localhost:3000/api/eventos', {
+    const respuesta = await fetch(`${API_URL}/api/eventos`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', ...encabezados },
       body: JSON.stringify({ titulo, tipo, fecha, lugar, descripcion })
@@ -47,7 +52,7 @@ function PanelEntrenador({ token, onCerrar, mostrarNotificacion }) {
   }
 
   const eliminarEvento = async (id) => {
-    const respuesta = await fetch(`http://localhost:3000/api/eventos/${id}`, { method: 'DELETE', headers: encabezados })
+    const respuesta = await fetch(`${API_URL}/api/eventos/${id}`, { method: 'DELETE', headers: encabezados })
     const datos = await respuesta.json()
     if (!respuesta.ok) return mostrarNotificacion(datos.mensaje, 'error')
     cargarDatos()
