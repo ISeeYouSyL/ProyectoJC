@@ -291,11 +291,11 @@ app.get("/api/deportistas", autenticar, async (req, res) => {
 
 app.get("/api/eventos", autenticar, async (req, res) => {
   try {
-    const usuario = await Usuario.findById(req.usuario.id).exec();
     let filtro = {};
 
-    if (req.usuario.rol === "entrenador") filtro = { entrenador: usuario._id };
+    if (req.usuario.rol === "entrenador") filtro = { entrenador: req.usuario.id };
     if (req.usuario.rol === "deportista") {
+      const usuario = await Usuario.findById(req.usuario.id).exec();
       if (!usuario || !usuario.entrenador) {
         return res.status(200).json([]);
       }
