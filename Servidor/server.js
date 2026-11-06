@@ -372,8 +372,6 @@ app.delete("/api/eventos/:id", autenticar, async (req, res) => {
 // Rutas de Autenticación //
 // Registrar nuevo usuario //
 
-// Registrar nuevo usuario //
-
 app.post("/api/usuarios/registro", async (req, res) => {
   try {
     const { nombre, correo, contrasena, rol } = req.body;
@@ -395,11 +393,10 @@ app.post("/api/usuarios/registro", async (req, res) => {
       return res.status(400).json({ mensaje: "Este correo ya está registrado." });
     }
 
-    // Le pasamos 'contrasena' directa porque usuarioSchema.pre('save') en basedatos.js se encarga de aplicar el hash de forma transparente
     const nuevoUsuario = new Usuario({
       nombre,
       correo: correo.toLowerCase(),
-      contrasena,
+      contrasena, // 👈 Mongoose se encarga de encriptarla en el hook pre('save')
       rol: rol === "entrenador" ? "entrenador" : "deportista"
     });
 
